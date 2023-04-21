@@ -1,0 +1,22 @@
+trigger:
+  branches:
+    include:
+    - main
+
+jobs:
+- job: Build
+  pool:
+    vmImage: windows-latest
+  steps:
+    # - task: NodeTool@0
+    #   inputs:
+    #     versionSpec: '18.15'
+
+    - task: Npm@1
+      displayName: 'Install Latest Azure Functions V4 Runtime'
+      inputs:
+        command: custom
+        customCommand: 'install azure-functions-core-tools --unsafe-perm true'
+
+    - powershell: |
+        .\node_modules\azure-functions-core-tools\bin\func.exe
